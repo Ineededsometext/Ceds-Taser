@@ -71,6 +71,11 @@ function SWEP:Deploy()
 		end
 		
         self.ShootPos:Spawn()
+		
+		for _, p in pairs( self.Prongs ) do
+			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+		end
     end
 
     return true
@@ -78,20 +83,21 @@ end
 
 function SWEP:Holster()
     if ( SERVER ) then
+		for _, p in pairs( self.Prongs ) do
+			if ( not IsValid( p.Target ) and IsValid( p ) ) then
+				p:Remove()
+				table.RemoveByValue( self.Prongs, p )
+			end
+		end
+	
         if ( IsValid( self.ShootPos ) ) then
             self.ShootPos:Remove()
-        end
-
-        if ( IsValid( self.Prong ) ) then
-            self.Prong:Remove()
         end
 
         if ( IsValid( self.Cable ) and IsValid( self.Cable2 ) ) then
             self.Cable:Remove()
             self.Cable2:Remove()
         end
-
-        self.Prongs = {}
     end
 
     return true
@@ -119,6 +125,11 @@ function SWEP:Think()
 		end
 		
         self.ShootPos:Spawn()
+		
+		for _, p in pairs( self.Prongs ) do
+			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+		end
     end
 end
 
@@ -166,4 +177,17 @@ end
 function SWEP:ShootEffects()
     self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
     self.Owner:SetAnimation( PLAYER_ATTACK1 )
+end
+
+function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	surface.SetDrawColor( 255, 255, 255, alpha )
+	surface.SetTexture( self.WepSelectIcon )
+
+	y = y + 10
+	x = x + 30
+	wide = wide - 20
+
+	surface.DrawTexturedRect( x , y , ( wide / 1.35 ), ( wide / 1.35 ) )
+
+	self:PrintWeaponInfo( x + wide + 20, y + tall * 0.95, alpha )
 end

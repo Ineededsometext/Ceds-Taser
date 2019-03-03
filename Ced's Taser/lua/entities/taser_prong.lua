@@ -15,18 +15,19 @@ if ( CLIENT ) then
 end
 
 local BlackList = {
-    "npc_combinegunship",
-    "npc_cscanner",
-    "npc_combinedropship",
-    "npc_combine_camera",
-    "npc_turret_ceiling",
-    "npc_helicopter",
-    "npc_manhack",
-    "npc_rollermine",
-    "npc_strider",
-    "npc_turret_floor",
-    "npc_barnacle",
-    "npc_antlionguard"
+    [ "npc_combinegunship" ] = true,
+    [ "npc_cscanner" ]  = true,
+    [ "npc_combinedropship" ] = true,
+    [ "npc_combine_camera" ] = true,
+	[ "npc_clawscanner" ] = true,
+    [ "npc_turret_ceiling" ] = true,
+    [ "npc_helicopter" ] = true,
+    [ "npc_manhack" ] = true,
+    [ "npc_rollermine" ] = true,
+    [ "npc_strider" ] = true,
+    [ "npc_turret_floor" ] = true,
+    [ "npc_barnacle" ] = true,
+    [ "npc_antlionguard" ] = true
 }
 
 function ENT:Initialize()
@@ -56,7 +57,7 @@ end
 local function CleanUp( ragdoll, ent, weapon, rendermode, movetype, time )
     if ( IsValid( ragdoll ) ) then
         if ( IsValid( ent ) ) then
-            ent:SetPos(ragdoll:GetPos())
+            ent:SetPos( ragdoll:GetPos() )
         end
 
         if ( ent:IsPlayer() and ent:Alive() or ent:IsNPC() ) then  
@@ -156,7 +157,7 @@ local function Ragdoll( ent )
 end
 
 function ENT:Touch( ent )
-    if ( ent == self.Owner or self.Touched == true or table.HasValue( BlackList, ent:GetClass() ) and self.Admin == nil ) then return end
+    if ( ent == self.Owner or self.Touched == true or BlackList[ ent:GetClass() ] ) then return end
 
     local speed = self:GetVelocity():Length()
         
@@ -186,6 +187,8 @@ function ENT:Touch( ent )
         self.Target = ent
 
         local ragdoll = ent:GetNWEntity( "ced_ragdoll_entity" )
+		if ( not IsValid( ragdoll ) ) then return end
+		
         local effect = EffectData()
 		effect:SetOrigin( ragdoll:GetPos() )
 		effect:SetStart( ragdoll:GetPos() )
