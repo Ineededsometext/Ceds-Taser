@@ -4,7 +4,7 @@ CreateConVar( "taser_delay", "7", FCVAR_NONE, "The delay of each shot." )
 CreateConVar( "taser_range", "450", FCVAR_NONE, "The range of the taser." )
 
 hook.Add( "PhysgunPickup", "ced_disable_when_tased", function(_, ent)
-    if ( ent:GetNWBool("ced_tased") ) then return false end
+    if ( ent:GetNWBool( "ced_tased" ) ) then return false end
 end)
 
 hook.Add( "EntityTakeDamage", "ced_ragdoll_damage", function( ent, data )
@@ -30,11 +30,14 @@ hook.Add( "PlayerSpawn", "ced_remove_tased_ragdoll", function( ply )
     if ( IsValid( ply:GetNWEntity( "ced_ragdoll_entity" ) ) ) then
         ply:GetNWEntity( "ced_ragdoll_entity" ):Remove()
         ply:SetNWEntity( "ced_ragdoll_entity", nil )
+		
+		ply:Freeze( false )
+		ply:SetNWBool( "ced_tased", false )
     end
 end )
 
 hook.Add( "PlayerSwitchWeapon", "ced_prevent_switch_when_tased", function(ply)
-    if ( ply:GetNWBool("ced_tased") ) then
+    if ( ply:GetNWBool( "ced_tased" ) ) then
         return true
     end
 end )

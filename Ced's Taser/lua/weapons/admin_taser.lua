@@ -16,8 +16,8 @@ end
 
 SWEP.PrintName = "Admin Taser"
 SWEP.Author = "Ced" 
-SWEP.Purpose = "Amplified version of the normal taser."
-SWEP.Instructions = "Mouse1 to shoot, Mouse2 to electrocute."
+SWEP.Purpose = "People who have been tased by this won't be released until you reload."
+SWEP.Instructions = "Mouse1 to shoot, Mouse2 to electrocute, Reload to release."
 SWEP.Category = "Ced's Weapons"
 SWEP.Slot = 1
 SWEP.AdminOnly = true
@@ -45,6 +45,7 @@ SWEP.WorldModel = "models/csgo/weapons/w_eq_taser.mdl"
 
 SWEP.Prongs = {}
 SWEP.Deploying = false
+SWEP.ReleaseDelay = CurTime()
 
 function SWEP:Deploy()
     self:SetHoldType( self.HoldType )
@@ -131,7 +132,8 @@ function SWEP:PrimaryAttack()
 
         local tr = self.Owner:GetEyeTrace()
 
-        self.Prong = ents.Create( "taser_prong" )
+        self.Prong = ents.Create( "admin_taser_prong" )
+		self.Prong.Taser = self
         self.Prong:SetAngles( self.Owner:EyeAngles() )
         self.Prong:SetPos( self.Owner:GetShootPos() )
         self.Prong:SetAngles( self.Owner:EyeAngles() )
@@ -149,7 +151,7 @@ function SWEP:PrimaryAttack()
     end
 
     self:ShootEffects()
-    self:SetNextPrimaryFire( CurTime() + 0.05 )
+    self:SetNextPrimaryFire( CurTime() + GetConVar( "taser_delay" ):GetFloat() )
 end
 
 function SWEP:SecondaryAttack()
@@ -157,11 +159,21 @@ function SWEP:SecondaryAttack()
 
     for _, p in pairs( self.Prongs ) do
         if ( IsValid( p.Target ) ) then
-            p.Target:TakeDamage( GetConVar( "taser_damage" ):GetFloat() * 5, self.Owner, self )
+            p.Target:TakeDamage( GetConVar( "taser_damage" ):GetFloat(), self.Owner, self )
         end
     end
 
     self.Owner:SetAnimation( PLAYER_ATTACK1 )
+end
+
+function SWEP:Reload()
+	if ( self.ReleaseDelay <= CurTime() ) then
+		for _, p in pairs( self.Prongs ) do
+			p.Released = true
+		end
+	
+		self.ReleaseDelay = CurTime() + 0.25
+	end
 end
 
 function SWEP:ShootEffects()
