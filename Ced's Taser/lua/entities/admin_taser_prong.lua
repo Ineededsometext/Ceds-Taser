@@ -207,7 +207,9 @@ function ENT:Touch( ent )
                 return
             end
 			
-			if ( not IsValid( ent ) or not IsValid( self ) or not ent:Alive() ) then 
+			if ( IsValid( ent ) and ( ent:IsPlayer() and not ent:Alive() ) ) then 
+				ragdoll:Ignite()
+			elseif ( IsValid( ent ) and ent:IsNPC() and ent:Health() <= 0 ) then
 				ragdoll:Ignite()
 			end 
 
