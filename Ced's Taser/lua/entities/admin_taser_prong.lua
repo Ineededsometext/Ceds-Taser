@@ -207,7 +207,7 @@ function ENT:Touch( ent )
                 return
             end
 			
-			if ( not IsValid( self ) or not IsValid( self.Owner ) or not self.Owner:Alive() ) then 
+			if ( not IsValid( ent ) or not IsValid( self ) or not ent:Alive() ) then 
 				ragdoll:Ignite()
 			end 
 

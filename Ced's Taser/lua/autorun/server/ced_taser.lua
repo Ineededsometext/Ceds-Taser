@@ -42,6 +42,12 @@ hook.Add( "PlayerSwitchWeapon", "ced_prevent_switch_when_tased", function(ply)
     end
 end )
 
+hook.Add( "PostPlayerDeath", "ced_remove_ragdoll", function( ply )
+	if ( ply:GetNWBool( "ced_tased" ) ) then
+		ply:GetRagdollEntity():Remove()
+	end
+end ) 
+
 hook.Add( "PlayerDisconnected", "ced_remove_tased_ragdoll", function( ply )
 	if ( IsValid( ply:GetNWEntity( "ced_ragdoll_entity" ) ) ) then
         ply:GetNWEntity( "ced_ragdoll_entity" ):Remove()

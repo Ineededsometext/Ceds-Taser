@@ -6,11 +6,13 @@ ENT.Base = "base_gmodentity"
 ENT.PrintName = "Taser Prong"
 ENT.Author = "Ced"
 
-function ENT:Draw()
-    self:DrawModel()
-end
+if ( CLIENT ) then 
+	function ENT:Draw()
+		self:DrawModel()
+	end
 
-if ( CLIENT ) then return end
+	return 
+end
 
 local BlackList = {
     "npc_combinegunship",
@@ -172,8 +174,8 @@ function ENT:Touch( ent )
             util.Effect( "StunstickImpact", self.Sparks )
         end
 
-        if ( ent.TaserHitSound == nil ) then
-            ent.TaserHitSound = true
+        if ( self.TaserHitSound == nil ) then
+            self.TaserHitSound = true
             ent:EmitSound( Sound( "ced/taser/taser_hit.wav" ) )
         end
         
@@ -200,7 +202,9 @@ function ENT:Touch( ent )
                 return
             end
 			
-			if ( not IsValid( self ) or not IsValid( self.Owner ) or not self.Owner:Alive() ) then 
+			if ( ent:IsPlayer() and ( not IsValid( ent ) or not IsValid( self ) or not ent:Alive() ) ) then 
+				ragdoll:Ignite()
+			elseif ( ent:IsNPC() and ent:Health() <= 0 ) then
 				ragdoll:Ignite()
 			end 
 
