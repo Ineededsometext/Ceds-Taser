@@ -132,7 +132,7 @@ function SWEP:PrimaryAttack()
 
         self.Prong = ents.Create( "taser_prong" )
         self.Prong:SetAngles( self.Owner:EyeAngles() )
-        self.Prong:SetPos( self.Owner:EyePos() + ( self.Owner:GetAimVector() * 30 ) - Vector( 0, 0, 5 ) )
+        self.Prong:SetPos( self.Owner:GetShootPos() )
         self.Prong:SetAngles( self.Owner:EyeAngles() )
         self.Prong.Owner = self.Owner
         self.Prong:Spawn()
