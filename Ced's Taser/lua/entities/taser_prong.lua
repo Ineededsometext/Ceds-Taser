@@ -143,6 +143,13 @@ local function Ragdoll( ent )
         end
     end
 
+    timer.Create( "valid_ragdoll_check" .. ent:EntIndex(), 0, 0, function()
+		if ( not IsValid( ragdoll ) ) then
+			CleanUp( nil, ent, weapon, rendermode, movetype )
+			timer.Destroy( "valid_ragdoll_check" .. ent:EntIndex() )
+		end
+	end )
+
     timer.Create( "death_check" .. ent:EntIndex(), 0, 0, function()
         if ( IsValid( ragdoll ) and IsValid( ent ) and ent:IsNPC() and ent:Health() <= 0 ) then
             ragdoll:Remove()
