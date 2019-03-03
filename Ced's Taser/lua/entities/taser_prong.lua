@@ -141,10 +141,8 @@ local function Ragdoll( ent )
     end
 
     timer.Create( "death_check" .. ent:EntIndex(), 0, 0, function()
-        if ( IsValid( ent ) and ( ent:IsPlayer() and not Alive() or ent:IsNPC() and ent:Health() <= 0 ) ) then
-            if ( ( IsValid( ragdoll ) and ent:IsPlayer() and IsValid( ent:GetRagdollEntity() ) ) or IsValid( ragdoll ) ) then
-                ragdoll:Remove()
-            end
+        if ( IsValid( ragdoll ) and IsValid( ent ) and ent:IsNPC() and ent:Health() <= 0 ) then
+            ragdoll:Remove()
         end
     end )
 
@@ -201,6 +199,10 @@ function ENT:Touch( ent )
 
                 return
             end
+			
+			if ( not IsValid( self ) or not IsValid( self.Owner ) or not self.Owner:Alive() ) then 
+				ragdoll:Ignite()
+			end 
 
             local effect2 = EffectData()
             effect2:SetOrigin( ragdoll:GetPos() )
