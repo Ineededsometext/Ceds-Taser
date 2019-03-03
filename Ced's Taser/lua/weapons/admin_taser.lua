@@ -144,7 +144,7 @@ function SWEP:PrimaryAttack()
 
         local phys = self.Prong:GetPhysicsObject()
 		local range = GetConVar( "taser_range" ):GetFloat()
-        phys:ApplyForceCenter( self.Owner:GetAimVector():GetNormalized() *  math.pow( tr.HitPos:Length(), 10 ) )
+        phys:ApplyForceCenter( self.Owner:GetAimVector():GetNormalized() *  math.pow( tr.HitPos:Length(), 8 ) )
         
         self.Cable = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
         self.Cable2 = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
