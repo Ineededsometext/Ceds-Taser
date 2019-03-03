@@ -141,14 +141,15 @@ function SWEP:PrimaryAttack()
         table.insert( self.Prongs, #self.Prongs + 1, self.Prong )
 
         local phys = self.Prong:GetPhysicsObject()
-        phys:ApplyForceCenter( self.Owner:GetAimVector():GetNormalized() *  math.pow( tr.HitPos:Length(), 5 ) )
+		local range = GetConVar( "taser_range" ):GetFloat()
+        phys:ApplyForceCenter( self.Owner:GetAimVector():GetNormalized() *  math.pow( tr.HitPos:Length(), 10 ) )
         
-        self.Cable = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), 450, 0, 0, 0.25, "cable/blue_elec", false )
-        self.Cable2 = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), 450, 0, 0, 0.25, "cable/blue_elec", false )
+        self.Cable = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
+        self.Cable2 = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
     end
 
     self:ShootEffects()
-    self:SetNextPrimaryFire( CurTime() + ( GetConVar( "taser_delay" ):GetFloat() / ( GetConVar( "taser_delay" ):GetFloat() * 2.5 ) ) )
+    self:SetNextPrimaryFire( CurTime() + 0.05 )
 end
 
 function SWEP:SecondaryAttack()
