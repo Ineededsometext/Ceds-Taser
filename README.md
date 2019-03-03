@@ -6,6 +6,7 @@ Steam Workshop can be found [here.](https://steamcommunity.com/sharedfiles/filed
 - taser_duration (5 by default) - The duration of the stun.
 - taser_damage (0.5 by default) - The damage of the taser.
 - taser_delay (7 by default) - The delay between shots.
+- taser_range (450 by default) - The range of the taser.
 
 ## Features
 - CS:GO Zeus 3D model. (c_model, made by Buu342)
