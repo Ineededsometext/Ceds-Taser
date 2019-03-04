@@ -74,9 +74,10 @@ function SWEP:Deploy()
 		
         self.ShootPos:Spawn()
 		
+		local range = GetConVar( "taser_range" ):GetFloat() or 450
 		for _, p in pairs( self.Prongs ) do
-			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
-			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
 		end
     end
 
@@ -128,9 +129,10 @@ function SWEP:Think()
 		
         self.ShootPos:Spawn()
 		
+		local range = GetConVar( "taser_range" ):GetFloat() or 450
 		for _, p in pairs( self.Prongs ) do
-			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
-			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), GetConVar( "taser_range" ):GetFloat(), 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
+			self.Cable2 = constraint.Rope( self.ShootPos, p, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
 		end
     end
 end
@@ -162,7 +164,7 @@ function SWEP:PrimaryAttack()
     end
 
     self:ShootEffects()
-    self:SetNextPrimaryFire( CurTime() + GetConVar( "taser_delay" ):GetFloat() )
+    self:SetNextPrimaryFire( CurTime() + ( GetConVar( "taser_delay" ):GetFloat() or 7 ) )
 end
 
 function SWEP:SecondaryAttack()
@@ -170,7 +172,7 @@ function SWEP:SecondaryAttack()
 
     for _, p in pairs( self.Prongs ) do
         if ( IsValid( p.Target ) ) then
-            p.Target:TakeDamage( GetConVar( "taser_damage" ):GetFloat(), self.Owner, self )
+            p.Target:TakeDamage( GetConVar( "taser_damage" ):GetFloat() or 0.5, self.Owner, self )
         end
     end
 
