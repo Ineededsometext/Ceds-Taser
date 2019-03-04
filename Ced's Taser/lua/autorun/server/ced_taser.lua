@@ -3,9 +3,9 @@ CreateConVar( "taser_damage", "0.5", FCVAR_NONE, "The damage of the taser." )
 CreateConVar( "taser_delay", "7", FCVAR_NONE, "The delay of each shot." )
 CreateConVar( "taser_range", "450", FCVAR_NONE, "The range of the taser." )
 
-hook.Add( "PhysgunPickup", "ced_disable_when_tased", function(_, ent)
+hook.Add( "PhysgunPickup", "ced_disable_when_tased", function( _, ent )
     if ( ent:GetNWBool( "ced_tased" ) ) then return false end
-end)
+end )
 
 hook.Add( "EntityTakeDamage", "ced_ragdoll_damage", function( ent, data )
     if ( ent:GetClass() == "prop_ragdoll" and ent.OwnerEnt != nil ) then
