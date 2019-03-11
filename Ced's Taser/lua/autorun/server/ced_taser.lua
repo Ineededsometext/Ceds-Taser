@@ -30,9 +30,11 @@ hook.Add( "PlayerSpawn", "ced_remove_tased_ragdoll", function( ply )
     if ( IsValid( ply:GetNWEntity( "ced_ragdoll_entity" ) ) ) then
         ply:GetNWEntity( "ced_ragdoll_entity" ):Remove()
         ply:SetNWEntity( "ced_ragdoll_entity", nil )
-		
-		ply:Freeze( false )
-		ply:SetNWBool( "ced_tased", false )
+    end
+	
+    if ( ply:GetNWBool( "ced_tased" ) ) then
+	ply:Freeze( false )
+	ply:SetNWBool( "ced_tased", false )
     end
 end )
 
