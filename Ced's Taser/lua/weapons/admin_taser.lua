@@ -139,6 +139,8 @@ end
 
 function SWEP:PrimaryAttack()
     if ( self.Deploying ) then return false end
+	
+    self:ShootEffects()
 
     if ( SERVER ) then
         self.Owner:EmitSound( self.Primary.Sound )
@@ -161,10 +163,9 @@ function SWEP:PrimaryAttack()
         
         self.Cable = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, 0 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
         self.Cable2 = constraint.Rope( self.ShootPos, self.Prong, 0, 0, Vector( 0, 0, -1 ), Vector( 0, 0, 0 ), range, 0, 0, 0.25, "cable/blue_elec", false )
+    
+	self:SetNextPrimaryFire( CurTime() + ( GetConVar( "taser_delay" ):GetFloat() or 7 ) )
     end
-
-    self:ShootEffects()
-    self:SetNextPrimaryFire( CurTime() + ( GetConVar( "taser_delay" ):GetFloat() or 7 ) )
 end
 
 function SWEP:SecondaryAttack()
